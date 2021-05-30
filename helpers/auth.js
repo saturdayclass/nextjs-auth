@@ -4,3 +4,8 @@ export async function hashPassword(password) {
   const hashedPassword = await hash(password, 12);
   return hashedPassword;
 }
+
+export async function verifyPassword(password, hashPassword) {
+  const isValid = await compore(password, hashPassword);
+  return isValid;
+}
