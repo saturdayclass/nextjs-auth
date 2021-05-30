@@ -11,8 +11,8 @@ export default NextAuth({
     Providers.Credentials({
       async authorize(credentials) {
         const client = await connectToDatabase();
-        const userCollection = client.db.collection('users');
-        const user = userCollection.findOne({ email: credentials.email });
+        const userCollection = client.db().collection('users');
+        const user = await userCollection.findOne({ email: credentials.email });
         if (!user) {
           client.close();
           throw new Error('User not found');
@@ -28,11 +28,10 @@ export default NextAuth({
           throw new Error('Cloud not log you in!');
         }
 
+        client.close();
         return {
           email: user.email,
         };
-
-        client.close();
       },
     }),
   ],
